@@ -13,6 +13,7 @@ import QuizResultPage from './pages/Quizzes/QuizResultPage'
 import ProfilePage from './pages/Profile/ProfilePage'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import { useAuth } from './context/AuthContext'
+import Home from './pages/Home/Home'
 
 const App = () => {
   const { isAuthenticated, loading } = useAuth()
@@ -26,33 +27,31 @@ const App = () => {
 
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
-        />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+      <Router>
+          <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                  path="/login"
+                  element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
+              />
+              <Route path="/register" element={<RegisterPage />} />
 
+              {/* Protected Routes */}
+              <Route element={<ProtectedRoute />}>
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/documents" element={<DocumentListPage />} />
+                  <Route path="/documents/:id" element={<DocumentDetailPage />} />
+                  <Route path="/flashcards" element={<FlashcardsListPage />} />
+                  <Route path="//documents/:id/flashcards" element={<FlashcardPage />} />
+                  <Route path="/quizzes/:quizId" element={<QuizTakePage />} />
+                  <Route path="/quizzes/:quizId/results" element={<QuizResultPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+              </Route>
 
-        {/* Protected Routes */}
-        <Route element={< ProtectedRoute />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/documents" element={<DocumentListPage />} />
-          <Route path="/documents/:id" element={<DocumentDetailPage />} />
-          <Route path="/flashcards" element={<FlashcardsListPage />} />
-          <Route path="//documents/:id/flashcards" element={<FlashcardPage />} />
-          <Route path="/quizzes/:quizId" element={<QuizTakePage />} />
-          <Route path="/quizzes/:quizId/results" element={<QuizResultPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-        </Route>
-
-
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Router>
-  )
+              <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+      </Router>
+  );
 }
 
 export default App
